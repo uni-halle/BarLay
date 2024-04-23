@@ -1,2 +1,1 @@
-# BarLay
-Barcode Layout Optimization
+# BarLay - Barcode Layout Optimization
