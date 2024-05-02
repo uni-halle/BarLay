@@ -6,7 +6,7 @@ todo
 
 ## Project Organization
 
-This project is separated in several subprojects, each associated to some heuristic. Each comes with a README file in which the installation process and command line options are explained. 
+This project is separated in several subprojects, each associated to some heuristic. Each subproject contains with a README file in which the installation process and command line options are explained. 
 
 ## Input and Output Format
 
