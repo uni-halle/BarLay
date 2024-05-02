@@ -3,14 +3,21 @@
 
 ### Installation
 
-1. Create a build directory.
+1. Download the source files.
 
    ````
+   git clone https://github.com/uni-halle/BarLay.git
+   ````
+
+2. Create a build directory.
+
+   ````
+     cd BarLay
      mkdir build
      cd build
    ````
    
-2. Build the program.
+3. Build the program.
 
    ````
    cmake -DCMAKE_BUILD_TYPE=Release ..
