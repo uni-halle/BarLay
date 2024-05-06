@@ -61,10 +61,10 @@ namespace barcode_layout {
         }
 
         /**
-         * Return the indices of the barcodes that have been assigned to some layout position.
+         * Return barcode indices (assigned or unassigned) in row-major-order.
          * @return
          */
-        const std::vector<barcode_index> &get_assigned_barcodes() const {
+        const std::vector<barcode_index> &get_barcode_order() const {
             return order;
         }
 

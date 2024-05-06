@@ -16,15 +16,7 @@
 #include <unordered_set>
 #include <bitset>
 
-typedef int32_t barcode_index;
-
 namespace barcode_layout {
-
-    __device__ void swap(synthesis_schedule &s1, synthesis_schedule &s2) {
-        synthesis_schedule sched = s1;
-        s1 = s2;
-        s2 = sched;
-    }
 
     /**
      *
@@ -325,6 +317,8 @@ namespace barcode_layout {
 
     public:
 
+        static bool verbose;
+
         local_search(const std::vector<synthesis_schedule> &schedules,
                      layout initial_layout)
                 : current_layout(std::move(initial_layout)),
@@ -356,9 +350,11 @@ namespace barcode_layout {
                     layout::row_count * layout::col_count * sizeof(position));
             cost_improvement_host = (unsigned *) malloc(layout::row_count * layout::col_count * sizeof(unsigned));
 
-            // print headline
-            std::cout << "iteration,cost,ms,swaps,positions" << std::endl;
-            std::cout << "0," << current_cost << ",0,0,0" << std::endl;
+            if(verbose) {
+                // print headline
+                std::cout << "iteration,cost,ms,swaps,positions" << std::endl;
+                std::cout << "0," << current_cost << ",0,0,0" << std::endl;
+            }
 
             // initially, we need to find best swap partners for *all* positions
             for (position ij = 0; ij < layout::row_count * layout::col_count; ij++)
@@ -440,12 +436,12 @@ namespace barcode_layout {
 
                 if (cost_improvement_host[swap_order[0]] <= 0) {
 
-                    // todo: hier weiter: ausgabe anpassen
-
-                    auto stop = std::chrono::high_resolution_clock::now();
-                    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
-                    std::cout << iteration << "," << current_cost << "," << duration.count()
-                              << "," << 0 << "," << position_count << std::endl;
+                    if(verbose) {
+                        auto stop = std::chrono::high_resolution_clock::now();
+                        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
+                        std::cout << iteration << "," << current_cost << "," << duration.count()
+                                  << "," << 0 << "," << position_count << std::endl;
+                    }
 
                     if (refresh)
                         break; // we found a local optimum
@@ -574,10 +570,12 @@ namespace barcode_layout {
                  ***********************************************************************/
 
                 current_cost = new_cost;
-                auto stop = std::chrono::high_resolution_clock::now();
-                auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
-                std::cout << iteration << "," << new_cost << "," << duration.count()
-                          << "," << swap_cnt << "," << position_count << std::endl;
+                if(verbose) {
+                    auto stop = std::chrono::high_resolution_clock::now();
+                    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
+                    std::cout << iteration << "," << new_cost << "," << duration.count()
+                              << "," << swap_cnt << "," << position_count << std::endl;
+                }
 
                 /************************************************************************
                  * Determine the positions (i,j) for which we need to find a new best
@@ -611,6 +609,7 @@ namespace barcode_layout {
         }
     };
 
+    bool local_search::verbose = false;
 }
 
 #endif //INC_2OPT_LOCAL_SEARCH_CUH

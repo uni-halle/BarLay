@@ -26,4 +26,10 @@ public:
 
 };
 
+std::ostream& operator<<(std::ostream& os, const barcode& b) {
+    os << std::string(b.nucleotides, b.BARCODE_LENGTH);
+    return os;
+}
+
+
 #endif //INC_2OPT_BARCODE_H

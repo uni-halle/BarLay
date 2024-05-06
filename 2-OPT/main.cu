@@ -15,10 +15,17 @@ using namespace barcode_layout;
 
 int main(int argc, char **argv) {
 
-    if (argc != 2) {
-        std::cout << "Usage: 2opt <file>" << std::endl;
-        std::cout << " file: barcode file\n" << std::endl;
+    if (argc < 2) {
+        std::cout << "Usage: 2opt <file> [<options> ...]" << std::endl;
+        std::cout << " file: barcode file" << std::endl;
+        std::cout << " options are:" << std::endl;
+        std::cout << "    -v: verbose mode (additional output)" << std::endl;
         return -1;
+    }
+
+    /* Parse command line arguments */
+    if (argc > 2 && std::string(argv[2]) == "-v") {
+        local_search::verbose = true;
     }
 
     /* Read barcodes from file */
@@ -36,21 +43,27 @@ int main(int argc, char **argv) {
         schedules.emplace_back(barcode);
 
     /* Create an initial layout */
-    //layout initial_layout = random_layout(barcodes);
     layout initial_layout = input_layout(barcodes);
     unsigned initial_cost = layout_cost(schedules, initial_layout);
 
     /* Print the initial layout cost */
-    //std::cout << layout_cost(schedules, initial_layout) << std::endl;
+    if (local_search::verbose)
+        std::cout << "initial layout cost = " << layout_cost(schedules, initial_layout) << std::endl;
 
     /* Start the local search */
-    //layout final_layout = local_search_host(schedules, initial_layout);
     layout final_layout = local_search(schedules, initial_layout);
     unsigned final_cost = layout_cost(schedules, final_layout);
 
     /* Print the final layout cost */
-    double gain = 100.0 * (initial_cost - final_cost) / initial_cost;
-    std::cout << final_cost << ", improvement=" << (initial_cost - final_cost) << ", gain=" << gain << "%" << std::endl;
+    if (local_search::verbose) {
+        double gain = 100.0 * (initial_cost - final_cost) / initial_cost;
+        std::cout << final_cost << ", improvement=" << (initial_cost - final_cost) << ", gain=" << gain << "%"
+                  << std::endl;
+    }
+
+    /* Output the final layout */
+    for(barcode_index k : final_layout.get_barcode_order())
+        std::cout << barcodes[k] << std::endl;
 
     return 0;
 }
