@@ -32,6 +32,35 @@ For example, a layout file could start with the lines
 
 The output format is identical to the input. 
 
+## Installation
+
+1. Check out the repository.
+
+   ````
+   git clone https://github.com/uni-halle/BarLay.git
+   ````
+
+2. Create a build directory.
+
+   ````
+     cd BarLay
+     mkdir build
+     cd build
+   ````
+   
+3. Build the program.
+
+   ````
+   cmake -DCMAKE_BUILD_TYPE=Release ..
+   make
+   ````
+## Data
+
+In the article below, we evalualted the algorithms on several barcode sets. You may find these barcodes in the [Data](https://github.com/uni-halle/BarLay/tree/main/data) directory. 
+
 ## Citation
 
-You are free to use this code for your own work. Please cite todo: 
+To cite this work in publication, please use
+> Frederik Jatzkowski, Antonia Schmidt, Robert Mank, Steffen Schüler, and Matthias Müller-Hannemann,
+> _Barcode Selection and Layout Optimization in Spatial Transcriptomics_,
+> Proceedings of the 22nd International Symposium on Experimental Algorithms (SEA 2024), DOI: https://doi.org/10.4230/LIPIcs.SEA.2024.17.
