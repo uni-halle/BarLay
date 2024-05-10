@@ -4,9 +4,13 @@
 
 Given a rectangular grid, the **barcode layout problem** asks for an assignment of so called _barcodes_ (i.e. short DNA sequences of fixed length) to the grid positions such that a certain error function is minimized. It is an important subproblem in bioinformatics, in particular in the field of spatial transcriptomics.
 
+todo: Add more details
+
 ## Project Organization
 
-This project is separated in several subprojects, each associated to some heuristic. Each subproject contains with a README file in which the installation process and command line options are explained. 
+This project is separated in several subprojects, each associated to some heuristic. Each subproject contains with a README file in which the installation process and command line options are explained. At the moment, the project contains the following subprojects:
+
+[2-OPT Local Search](https://github.com/uni-halle/BarLay/tree/main/2-OPT)
 
 ## Input and Output Format
 
@@ -30,4 +34,4 @@ The output format is identical to the input.
 
 ## Citation
 
-You are free to use this code for your own work. Please cite todo
+You are free to use this code for your own work. Please cite todo: 
