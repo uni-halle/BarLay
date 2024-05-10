@@ -1,5 +1,8 @@
 # BarLay - Barcode Layout Optimization
 ## 2-OPT Local Search
+### Description
+
+Given an initial layout, the algorithm exhaustively searches for possible swaps of two barcodes that would improve the layout cost. Afterwards, the algorithm performs these swaps and iterates until no swap can improve the cost.
 
 ### Installation
 
