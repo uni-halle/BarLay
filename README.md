@@ -10,7 +10,9 @@ This project is separated in several subprojects, each associated to some heuris
 
 ## Input and Output Format
 
-Input and output are text files with one barcode per line. The barcodes are given in row-major-order. Thus, the barcodes in row i are the ones in the lines i*col_count + 1, i*col_count + 2, ..., (i+1)*col_count. For example, a layout file could start with the lines
+Input of the tools are text files with one barcode per line. The barcodes are interpreted in row-major-order. Thus, assuming a layout with $`m`$ rows and $`n`$ columns, the barcodes in row $`i`$ are the ones in the lines $`i\cdot n + 1, i\cdot n + 2, ..., (i+1)\cdot n`$. A layout file is allowed to contain more barcodes than there are layout positions, in which case the barcode after line $`m\cdot n`$ can be used as excess.
+
+For example, a layout file could start with the lines
 
     CGTCCATCTTCATATGCGTCCTCGACTAGTGCTA
     GCCACCTGCCACTGTCAGCTACGATGCACTCGCA
@@ -24,7 +26,7 @@ Input and output are text files with one barcode per line. The barcodes are give
     ACCTTGACAGCATTGACCTTTATCAATGTGTTCT
     ...
 
-
+The output format is identical to the input. 
 
 ## Citation
 
