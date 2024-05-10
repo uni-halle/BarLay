@@ -2,7 +2,9 @@
 
 ## Problem Description
 
-todo
+Given a rectangular grid, the **barcode layout problem** asks for an assignment of so called _barcodes_ (i.e. short DNA sequences of fixed length) to the grid positions such that a certain error function is minimized. It is an important subproblem in bioinformatics, in particular in the field of spatial transcriptomics.
+
+
 
 ## Project Organization
 
