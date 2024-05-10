@@ -34,4 +34,7 @@ The output format is identical to the input.
 
 ## Citation
 
-You are free to use this code for your own work. Please cite todo: 
+To cite this work in publication, please use
+> Frederik Jatzkowski, Antonia Schmidt, Robert Mank, Steffen Schüler, and Matthias Müller-Hannemann,
+> _Barcode Selection and Layout Optimization in Spatial Transcriptomics_,
+> Proceedings of the 22nd International Symposium on Experimental Algorithms (SEA 2024), DOI: https://doi.org/10.4230/LIPIcs.SEA.2024.17.
