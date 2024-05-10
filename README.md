@@ -32,6 +32,32 @@ For example, a layout file could start with the lines
 
 The output format is identical to the input. 
 
+## Installation
+
+1. Check out the repository.
+
+   ````
+   git clone https://github.com/uni-halle/BarLay.git
+   ````
+
+2. Create a build directory.
+
+   ````
+     cd BarLay
+     mkdir build
+     cd build
+   ````
+   
+3. Build the program.
+
+   ````
+   cmake -DCMAKE_BUILD_TYPE=Release ..
+   make
+   ````
+## Data
+
+In the article below, we evalualted the algorithms on several barcode sets. You may find these barcodes in the [Data](https://github.com/uni-halle/BarLay/tree/main/data) directory. 
+
 ## Citation
 
 To cite this work in publication, please use
