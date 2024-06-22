@@ -10,10 +10,10 @@
 namespace layout {
     void print(FILE *target, const barcodes::Set *barcode_set, const struct Layout *layout) {
         fputs("[\n", target);
-        for (size_t y = 0; y < DIM_Y; y++) {
+        for (size_t y = 0; y < COL_COUNT; y++) {
             fputs("\t[", target);
 
-            for (size_t x = 0; x < DIM_X; x++) {
+            for (size_t x = 0; x < ROW_COUNT; x++) {
                 const struct Position *position = &layout->positions[x][y];
                 const barcodes::Barcode *barcode = &(*barcode_set)[position->i_barcode];
 
@@ -24,12 +24,12 @@ namespace layout {
                     
                 fputs("\"", target);
 
-                if(x < DIM_X-1) fputs(",", target);
+                if(x < ROW_COUNT-1) fputs(",", target);
             }
 
             fputs("]", target);
 
-            if(y < DIM_Y-1) fputs(",", target);
+            if(y < COL_COUNT-1) fputs(",", target);
 
             fputs("\n", target);
         }

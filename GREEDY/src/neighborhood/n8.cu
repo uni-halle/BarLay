@@ -22,7 +22,7 @@ namespace neighborhood {
         if (x > 0)
             (*neighbors)[2] = (*schedules)[layout->positions[x-1][y].i_barcode];
 
-        if (x > 0 && y < DIM_Y - 1)
+        if (x > 0 && y < COL_COUNT - 1)
             (*neighbors)[3] = (*schedules)[layout->positions[x-1][y+1].i_barcode];
     }
 
@@ -44,7 +44,7 @@ namespace neighborhood {
         if (x > 0)
             quality += d_synth(candidate, &(*neighbors)[2]);
 
-        if (x > 0 && y < DIM_Y - 1)
+        if (x > 0 && y < COL_COUNT - 1)
             quality += d_synth(candidate, &(*neighbors)[3]);
         
        return quality;

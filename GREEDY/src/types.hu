@@ -11,7 +11,7 @@ namespace layout {
     };
 
     struct Layout {
-        struct Position positions[DIM_X][DIM_Y];
+        struct Position positions[ROW_COUNT][COL_COUNT];
     };
 }
 

@@ -14,13 +14,13 @@ The algorithm can be compiled with different parameters:
 
 - NUMBER_OF_BARCODES: This parameter specifies the number of newline separated barcodes to read from stdin.
 - BARCODE_LENGTH: This specifies the length of each barcode in bytes.
-- DIM_X and DIM_Y: These specifiy the dimensions of the array on which the barcodes should be layed out. Note that `(DIM_X * DIM_Y) <= NUMBER_OF_BARCODES` must be true.
+- ROW_COUNT and COL_COUNT: These specifiy the dimensions of the array on which the barcodes should be layed out. Note that `(ROW_COUNT * COL_COUNT) <= NUMBER_OF_BARCODES` must be true.
 - NEIGHBORHOOD: This describes the neighborhood strategy to apply. A default strategy which uses 8 unweighted neighbors is provided.
 
 Now you can build the program using
 
 ```
-./scripts/build_greedy.sh <NUMBER_OF_BARCODES> <BARCODE_LENGTH> <DIM_X> <DIM_Y> [ <NEIGHBORHOOD_NAME> ]
+./scripts/build_greedy.sh <NUMBER_OF_BARCODES> <BARCODE_LENGTH> <ROW_COUNT> <COL_COUNT> [ <NEIGHBORHOOD_NAME> ]
 ```
 
 ## Running the program
@@ -52,7 +52,7 @@ The code defined here runs on the GPU so take this in mind for performance reaso
 
 3. Copy the barcode set somewhere onto the login node (eg next to the cloned repo).
 
-4. Configure greedy using `barcode-layout/scripts/configure_greedy.sh <NUMBER_OF_BARCODES> <BARCODE_LENGTH> <DIM_X> <DIM_Y> [ <NEIGHBORHOOD_NAME> ]`.
+4. Configure greedy using `barcode-layout/scripts/configure_greedy.sh <NUMBER_OF_BARCODES> <BARCODE_LENGTH> <ROW_COUNT> <COL_COUNT> [ <NEIGHBORHOOD_NAME> ]`.
 
 5. Queue the job using `sbatch barcode-layout/scripts/batch.sh <KUERZEL> <PATH_TO_BARCODE_SET>`.
 

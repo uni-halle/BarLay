@@ -190,8 +190,8 @@ namespace algorithm {
 
         int finished = 0;
         int percent = -1;
-        for (size_t x = 0; x < DIM_X; x++) {
-            for (size_t y = 0; y < DIM_Y; y++) {
+        for (size_t x = 0; x < ROW_COUNT; x++) {
+            for (size_t y = 0; y < COL_COUNT; y++) {
                 grid_reduction<<<THREAD_BLOCKS, THREADS_PER_THREAD_BLOCK>>>(x, y, device_layout, device_schedules, device_index_pool, device_result_block);
 
                 checkForError(__func__, __LINE__);
@@ -201,7 +201,7 @@ namespace algorithm {
                 checkForError(__func__, __LINE__);
                 
                 finished++;
-                int newPercent = (100 * finished) / (DIM_X * DIM_Y);
+                int newPercent = (100 * finished) / (ROW_COUNT * COL_COUNT);
                 if (percent < newPercent )
                 {
                     cudaDeviceSynchronize();
