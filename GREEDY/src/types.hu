@@ -1,0 +1,32 @@
+#ifndef _TYPES_
+#define _TYPES_
+
+#include "params.hu"
+
+#include <stdint.h>
+
+namespace layout {
+    struct Position {
+        uint32_t i_barcode;
+    };
+
+    struct Layout {
+        struct Position positions[DIM_X][DIM_Y];
+    };
+}
+
+namespace barcodes {
+    struct Barcode {
+        char nucleotides[BARCODE_LENGTH];
+    };
+
+    using Set = struct Barcode[NUMBER_OF_BARCODES];
+
+    struct SynthSchedule {
+        uint32_t chunks[SYNTH_SCHEDULE_CHUNKS];
+    };
+
+    using ScheduleSet = struct SynthSchedule[NUMBER_OF_BARCODES];
+}
+
+#endif
