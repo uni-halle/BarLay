@@ -23,6 +23,8 @@ Now you can build the program using
 ./scripts/build.sh <NUMBER_OF_BARCODES> <BARCODE_LENGTH> <ROW_COUNT> <COL_COUNT> [ <NEIGHBORHOOD_NAME> ]
 ```
 
+Depending on your platform, the shell script is not executable by default. Set the necessary permissions using `chmod` or the equivalent on your platform.
+
 ## Running the program
 
 The program reads the specified number of barcodes from `stdin` and writes the result to `stdout`. Additionally, log output is written to `stderr`.
@@ -30,10 +32,10 @@ The program reads the specified number of barcodes from `stdin` and writes the r
 Test it out using the following command.
 
 ```
-cat <MY_BARCODE_LIBRARY> | ./bin/barlay 1> result.json
+cat <MY_BARCODE_LIBRARY> | ./bin/barlay 1> result.txt
 ```
 
-After the progress bar reaches `100%` you should find a resulting layout in `./result.json`.
+After the progress bar reaches `100%` you should find a resulting layout as a newline separated row major list in `./result.txt`.
 
 ## Customizing the neighborhood
 
