@@ -4,7 +4,7 @@ NEIGHBORHOOD=$5
 if [ "$#" -ne 5 ]; then
     if [ "$#" -ne 4 ]; then
         echo "incorrect number of arguments ($#), please call this script as follows:"
-        echo "build_greedy.sh <NUMBER_OF_BARCODES> <BARCODE_LENGTH> <ROW_COUNT> <COL_COUNT> [ <NEIGHBORHOOD_NAME> ]"
+        echo "build.sh <NUMBER_OF_BARCODES> <BARCODE_LENGTH> <ROW_COUNT> <COL_COUNT> [ <NEIGHBORHOOD_NAME> ]"
         exit 1
     fi
     echo "defaulting to 'n8'-neighborhood"
