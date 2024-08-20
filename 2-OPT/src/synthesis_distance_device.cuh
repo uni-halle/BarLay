@@ -7,7 +7,7 @@
 
 #include "synthesis_schedule.h"
 
-__device__ unsigned synthesis_distance_device(
+__device__ inline unsigned synthesis_distance_device(
         const synthesis_schedule &s1,
         const synthesis_schedule &s2) {
     unsigned dist = 0;

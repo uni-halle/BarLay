@@ -11,9 +11,11 @@
 #include <string>
 #include <vector>
 
+#include "read_barcodes.h"
+
 using namespace barcode_layout;
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
 
     if (argc < 2) {
         std::cout << "Usage: 2opt <file> [<options> ...]" << std::endl;
@@ -29,14 +31,11 @@ int main(int argc, char **argv) {
     }
 
     /* Read barcodes from file */
-    std::vector<barcode> barcodes;
-    std::ifstream infile(argv[1]);
-    std::string line;
-    while (std::getline(infile, line))
-        barcodes.emplace_back(line);
+    std::vector<barcode> barcodes = read_barcodes(argv[1]);
 
-    if(barcodes.size() < layout::col_count*layout::row_count) {
-        std::cerr << "Error! Not enough barcodes! At least " << layout::col_count*layout::row_count << " needed!" << std::endl;
+    if (barcodes.size() < layout::col_count * layout::row_count) {
+        std::cerr << "Error! Not enough barcodes! At least " << layout::col_count * layout::row_count << " needed!" <<
+            std::endl;
         return -2;
     }
 
@@ -44,7 +43,7 @@ int main(int argc, char **argv) {
 
     /* Calculate synthesis schedules */
     std::vector<synthesis_schedule> schedules;
-    for (const auto &barcode: barcodes) // for each barcode
+    for (const auto& barcode : barcodes) // for each barcode
         schedules.emplace_back(barcode);
 
     /* Create an initial layout */
@@ -63,11 +62,11 @@ int main(int argc, char **argv) {
     if (local_search::verbose) {
         double gain = 100.0 * (initial_cost - final_cost) / initial_cost;
         std::cout << final_cost << ", improvement=" << (initial_cost - final_cost) << ", gain=" << gain << "%"
-                  << std::endl;
+            << std::endl;
     }
 
     /* Output the final layout */
-    for(barcode_index k : final_layout.get_barcode_order())
+    for (barcode_index k : final_layout.get_barcode_order())
         std::cout << barcodes[k] << std::endl;
 
     return 0;

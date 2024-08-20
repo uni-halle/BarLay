@@ -20,6 +20,8 @@ add_executable(2opt src/main.cu
         src/local_search_host.h
         src/direction.h
         src/input_layout.h
+        src/read_barcodes.h
+        src/read_barcodes.h
 )
 
 # add hidden executable that uses synthesis schedules as input
@@ -36,9 +38,15 @@ add_executable(2opt_syn_sched EXCLUDE_FROM_ALL
         src/local_search_host.h
         src/direction.h
         src/input_layout.h
-        src/main_syn_sched.cu
+        src/read_barcodes.h
+        src/read_barcodes.h
 )
 
 
 set_target_properties(2opt PROPERTIES
         CUDA_SEPARABLE_COMPILATION ON)
+
+add_executable(convert_barcodes EXCLUDE_FROM_ALL
+        src/barcode.h
+        src/convert_barcodes_to_synthesis_schedules.cu
+)

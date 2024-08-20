@@ -9,7 +9,7 @@
 #include <bit>
 #include <cstdint>
 
-int synthesis_distance_host(
+inline int synthesis_distance_host(
         const synthesis_schedule &s1,
         const synthesis_schedule &s2) {
 

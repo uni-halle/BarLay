@@ -9,6 +9,7 @@
 #include <vector>
 #include "barcode.h"
 #include <cstring>
+#include <sstream>
 
 struct synthesis_schedule {
 
@@ -27,6 +28,7 @@ struct synthesis_schedule {
 
     const static int MAX_CHUNKS = 4;
     uint32_t chunks[MAX_CHUNKS];
+    unsigned length = 0;
 
 public:
     synthesis_schedule() = default;
@@ -39,6 +41,7 @@ public:
 
         assert(str.size() <= MAX_CHUNKS * 32);
         memset(chunks, 0, MAX_CHUNKS * sizeof(uint32_t));
+        length = str.size();
 
         // for each chunk
         for (int j = 0; j < MAX_CHUNKS; j++) {
@@ -47,15 +50,18 @@ public:
             uint32_t j_th_chunk = 0;
 
             // for each character associated to the j-th chunk
-            for (int i = 0; i < 32 && j * 32 + i < str.size(); i++) {
-                assert(j*32+i < str.size());
+            int i = 0;
+            for (; i < 32 && j * 32 + i < str.size(); i++) {
                 const char c = str[j * 32 + i];
-                assert(c == '0' || c == '1');
                 const int k = c - '0';
+                assert(c == '0' || c == '1');
                 assert(k == 0 || k == 1);
                 j_th_chunk <<= 1;
                 j_th_chunk += k;
             }
+
+            // fill last chunk with zeros
+            j_th_chunk <<= (32 - i);
 
             chunks[j] = j_th_chunk;
         }
@@ -75,12 +81,14 @@ public:
             uint32_t current_chunk = 0;
 
             // for the 8 batches of the j-th chunk
-            for (int i = 0; i < 8; i++) {
+            int i = 0;
+            for (; i < 8 && barcode_index < barcode::BARCODE_LENGTH; i++) {
 
                 // construct the i-th batch of the j-th chunk
                 char synthesis_order[] = {'A', 'C', 'G', 'T'};
                 for (char c : synthesis_order) {
                     current_chunk <<= 1;
+                    length++;
                     if (barcode_index < barcode::BARCODE_LENGTH && b[barcode_index] == c) {
                         current_chunk++; // set right-most bit to one
                         barcode_index++;
@@ -88,10 +96,37 @@ public:
                 }
             }
 
+            // fill last chunk with zeros
+            current_chunk <<= (8-i)*4;
+
             assert(j < MAX_CHUNKS);
             chunks[j] = current_chunk;
         }
     }
+
+    /**
+     * Test whether the synthesis schedule contains a '1' in synthesis round i.
+     * @param round Round counter (starting with 0).
+     * @return
+     */
+    bool is_active(unsigned round) const {
+        assert(round < length);
+        unsigned k = round / 32;
+        unsigned r = round - 32 * k; // r = round % 32
+        assert(k < MAX_CHUNKS);
+        assert(r < 32);
+        assert(32*k+r == round);
+        bool res = (chunks[k] >> (31-r)) & 1;
+        return res;
+    }
 };
+
+inline std::ostream& operator<<(std::ostream& os, const synthesis_schedule& s) {
+    std::stringstream ss;
+    for(unsigned j=0; j<s.length; j++)
+        ss << s.is_active(j);
+    return os << ss.str();
+}
+
 
 #endif //INC_2OPT_SYNTHESIS_SCHEDULE_H

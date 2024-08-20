@@ -26,7 +26,7 @@ public:
 
 };
 
-std::ostream& operator<<(std::ostream& os, const barcode& b) {
+inline std::ostream& operator<<(std::ostream& os, const barcode& b) {
     os << std::string(b.nucleotides, b.BARCODE_LENGTH);
     return os;
 }
