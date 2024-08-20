@@ -16,15 +16,15 @@ namespace barcode_layout {
 
     struct random_layout : public input_layout {
 
-        explicit random_layout(const std::vector<barcode> &barcodes)
-                : input_layout(barcodes) {
+        explicit random_layout(size_t barcode_count)
+                : input_layout(barcode_count) {
 
             // randomly permute the indices on the array
             std::random_device rd;
             std::mt19937 g(rd());
             std::shuffle(order.begin(), order.end(), g);
 
-            for (position k = 0; k < barcodes.size(); k++)
+            for (position k = 0; k < barcode_count; k++)
                 position_of_barcode[order[k]] = k;
         }
 

@@ -13,13 +13,13 @@ namespace barcode_layout {
 
     struct input_layout : public layout {
 
-        explicit input_layout(const std::vector<barcode> &barcodes)
-                : layout(barcodes.size()) {
+        input_layout(size_t barcode_count)
+                : layout(barcode_count) {
 
-            for (position ij = 0; ij < barcodes.size(); ij++)
+            for (position ij = 0; ij < barcode_count; ij++)
                 order[ij] = ij;
 
-            for (barcode_index k = 0; k < barcodes.size(); k++)
+            for (barcode_index k = 0; k < barcode_count; k++)
                 position_of_barcode[k] = k;
         }
 
@@ -27,4 +27,4 @@ namespace barcode_layout {
 
 }
 
-#endif //INC_2OPT_RANDOM_LAYOUT_H
+#endif //INC_2OPT_INPUT_LAYOUT_H

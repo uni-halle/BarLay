@@ -35,6 +35,11 @@ int main(int argc, char **argv) {
     while (std::getline(infile, line))
         barcodes.emplace_back(line);
 
+    if(barcodes.size() < layout::col_count*layout::row_count) {
+        std::cerr << "Error! Not enough barcodes! At least " << layout::col_count*layout::row_count << " needed!" << std::endl;
+        return -2;
+    }
+
     //std::cout << "Excess: " << barcodes.size() - layout::row_count*layout::col_count << std::endl;
 
     /* Calculate synthesis schedules */
@@ -43,7 +48,7 @@ int main(int argc, char **argv) {
         schedules.emplace_back(barcode);
 
     /* Create an initial layout */
-    layout initial_layout = input_layout(barcodes);
+    layout initial_layout = input_layout(barcodes.size());
     unsigned initial_cost = layout_cost(schedules, initial_layout);
 
     /* Print the initial layout cost */
