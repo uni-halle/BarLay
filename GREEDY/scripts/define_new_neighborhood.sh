@@ -36,7 +36,7 @@ namespace neighborhood {
     __device__ __forceinline__ uint16_t nquality(
         uint32_t x,
         uint32_t y,
-        barcodes::SynthSchedule *candidate,
+        barcodes::Schedule *candidate,
         barcodes::ScheduleSet *schedules,
         Neighborhood* neighbors
     ) {

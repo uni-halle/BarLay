@@ -18,12 +18,12 @@
 namespace index_pool {
     struct Pool {
         uint32_t size;
-        uint32_t indices[NUMBER_OF_BARCODES];
+        uint32_t indices[NUMBER_OF_SCHEDULES];
     };
 
     __global__ void prepare(struct Pool *pool) {
-        pool->size = NUMBER_OF_BARCODES;
-        for (size_t i = 0; i < NUMBER_OF_BARCODES; i++)
+        pool->size = NUMBER_OF_SCHEDULES;
+        for (size_t i = 0; i < NUMBER_OF_SCHEDULES; i++)
             pool->indices[i] = i;
     }
 
@@ -105,7 +105,7 @@ namespace algorithm {
 
         // calculate quality of each barcode
         while (blockOffset + threadId < pool->size) {
-            barcodes::SynthSchedule candidate = (*schedules)[pool->indices[blockOffset + threadId]];
+            barcodes::Schedule candidate = (*schedules)[pool->indices[blockOffset + threadId]];
             
             uint16_t quality = neighborhood::nquality(x, y, &candidate, schedules, &neighbors);
 
@@ -159,7 +159,7 @@ namespace algorithm {
 
         // position best barcode at (x,y)
         if (threadId == 0) {
-            layout->positions[x][y].i_barcode = index_pool::poll(pool, qualities[0].indexPoolHandle);
+            layout->positions[x][y].i_schedule = index_pool::poll(pool, qualities[0].indexPoolHandle);
         }
     }
 
