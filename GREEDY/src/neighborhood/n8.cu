@@ -4,7 +4,7 @@
 
 namespace neighborhood {
 
-    using Neighborhood = barcodes::SynthSchedule[4];
+    using Neighborhood = barcodes::Schedule[4];
 
     __device__ __forceinline__ void load(
         uint32_t x,
@@ -14,22 +14,22 @@ namespace neighborhood {
         Neighborhood* neighbors
     ) {
         if (y > 0)
-            (*neighbors)[0] = (*schedules)[layout->positions[x][y-1].i_barcode];
+            (*neighbors)[0] = (*schedules)[layout->positions[x][y-1].i_schedule];
 
         if (x > 0 && y > 0)
-            (*neighbors)[1] = (*schedules)[layout->positions[x-1][y-1].i_barcode];
+            (*neighbors)[1] = (*schedules)[layout->positions[x-1][y-1].i_schedule];
 
         if (x > 0)
-            (*neighbors)[2] = (*schedules)[layout->positions[x-1][y].i_barcode];
+            (*neighbors)[2] = (*schedules)[layout->positions[x-1][y].i_schedule];
 
         if (x > 0 && y < COL_COUNT - 1)
-            (*neighbors)[3] = (*schedules)[layout->positions[x-1][y+1].i_barcode];
+            (*neighbors)[3] = (*schedules)[layout->positions[x-1][y+1].i_schedule];
     }
 
     __device__ __forceinline__ uint16_t nquality(
         uint32_t x,
         uint32_t y,
-        barcodes::SynthSchedule *candidate,
+        barcodes::Schedule *candidate,
         barcodes::ScheduleSet *schedules,
         Neighborhood* neighbors
     ) {

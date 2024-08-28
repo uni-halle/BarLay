@@ -4,7 +4,7 @@
 #include "params.hu"
 #include "types.hu"
 
-__device__ int d_synth(barcodes::SynthSchedule *s1, barcodes::SynthSchedule *s2)
+__device__ int d_synth(barcodes::Schedule *s1, barcodes::Schedule *s2)
 {
     int distance = 0;
 

@@ -7,7 +7,7 @@
 
 namespace layout {
     struct Position {
-        uint32_t i_barcode;
+        uint32_t i_schedule;
     };
 
     struct Layout {
@@ -16,17 +16,11 @@ namespace layout {
 }
 
 namespace barcodes {
-    struct Barcode {
-        char nucleotides[BARCODE_LENGTH];
-    };
-
-    using Set = struct Barcode[NUMBER_OF_BARCODES];
-
-    struct SynthSchedule {
+    struct Schedule {
         uint32_t chunks[SYNTH_SCHEDULE_CHUNKS];
     };
 
-    using ScheduleSet = struct SynthSchedule[NUMBER_OF_BARCODES];
+    using ScheduleSet = struct Schedule[NUMBER_OF_SCHEDULES];
 }
 
 #endif
