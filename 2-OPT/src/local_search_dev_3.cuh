@@ -2,13 +2,13 @@
 // Created by steffen on 07.02.24.
 //
 
-#ifndef INC_2OPT_LOCAL_SEARCH_2_CUH
-#define INC_2OPT_LOCAL_SEARCH_2_CUH
+#ifndef INC_2OPT_LOCAL_SEARCH_DEV_3_CUH
+#define INC_2OPT_LOCAL_SEARCH_DEV_3_CUH
 
 #include <utility>
 
 #include "synthesis_schedule.h"
-#include "synthesis_distance_device.cuh"
+#include "synthesis_distance_dev_1.cuh"
 #include "layout.h"
 #include "layout_cost.h"
 #include "direction.h"
@@ -28,7 +28,7 @@ namespace barcode_layout {
      * @param swap_partner
      * @param cost_improvement
      */
-    __global__ void find_best_swap_partner(
+    __global__  void find_best_swap_partner_v3(
             const position *positions,
             const unsigned position_count,
             const synthesis_schedule *schedules,
@@ -60,35 +60,35 @@ namespace barcode_layout {
 
             if (i > 0) {
                 S_ij[NORTH] = schedules[flat(i - 1, j)];
-                local_cost_pre_swap_ij += synthesis_distance_device(S_ij[CENTER], S_ij[NORTH]);
+                local_cost_pre_swap_ij += synthesis_distance_dev_1(S_ij[CENTER], S_ij[NORTH]);
             }
             if (i + 1 < layout::row_count) {
                 S_ij[SOUTH] = schedules[flat(i + 1, j)];
-                local_cost_pre_swap_ij += synthesis_distance_device(S_ij[CENTER], S_ij[SOUTH]);
+                local_cost_pre_swap_ij += synthesis_distance_dev_1(S_ij[CENTER], S_ij[SOUTH]);
             }
             if (j > 0) {
                 S_ij[WEST] = schedules[flat(i, j - 1)];
-                local_cost_pre_swap_ij += synthesis_distance_device(S_ij[CENTER], S_ij[WEST]);
+                local_cost_pre_swap_ij += synthesis_distance_dev_1(S_ij[CENTER], S_ij[WEST]);
             }
             if (j + 1 < layout::col_count) {
                 S_ij[EAST] = schedules[flat(i, j + 1)];
-                local_cost_pre_swap_ij += synthesis_distance_device(S_ij[CENTER], S_ij[EAST]);
+                local_cost_pre_swap_ij += synthesis_distance_dev_1(S_ij[CENTER], S_ij[EAST]);
             }
             if (i > 0 && j > 0) {
                 S_ij[NORTH_WEST] = schedules[flat(i - 1, j - 1)];
-                local_cost_pre_swap_ij += synthesis_distance_device(S_ij[CENTER], S_ij[NORTH_WEST]);
+                local_cost_pre_swap_ij += synthesis_distance_dev_1(S_ij[CENTER], S_ij[NORTH_WEST]);
             }
             if (i > 0 && j + 1 < layout::col_count) {
                 S_ij[NORTH_EAST] = schedules[flat(i - 1, j + 1)];
-                local_cost_pre_swap_ij += synthesis_distance_device(S_ij[CENTER], S_ij[NORTH_EAST]);
+                local_cost_pre_swap_ij += synthesis_distance_dev_1(S_ij[CENTER], S_ij[NORTH_EAST]);
             }
             if (i + 1 < layout::row_count && j > 0) {
                 S_ij[SOUTH_WEST] = schedules[flat(i + 1, j - 1)];
-                local_cost_pre_swap_ij += synthesis_distance_device(S_ij[CENTER], S_ij[SOUTH_WEST]);
+                local_cost_pre_swap_ij += synthesis_distance_dev_1(S_ij[CENTER], S_ij[SOUTH_WEST]);
             }
             if (i + 1 < layout::row_count && j + 1 < layout::col_count) {
                 S_ij[SOUTH_EAST] = schedules[flat(i + 1, j + 1)];
-                local_cost_pre_swap_ij += synthesis_distance_device(S_ij[CENTER], S_ij[SOUTH_EAST]);
+                local_cost_pre_swap_ij += synthesis_distance_dev_1(S_ij[CENTER], S_ij[SOUTH_EAST]);
             }
 
             /**************************************************************************
@@ -153,21 +153,21 @@ namespace barcode_layout {
                     unsigned local_cost_pre_swap_xy = 0;
 
                     if (x > 0)
-                        local_cost_pre_swap_xy += synthesis_distance_device(S_xy[CENTER], S_xy[NORTH]);
+                        local_cost_pre_swap_xy += synthesis_distance_dev_1(S_xy[CENTER], S_xy[NORTH]);
                     if (x + 1 < layout::row_count)
-                        local_cost_pre_swap_xy += synthesis_distance_device(S_xy[CENTER], S_xy[SOUTH]);
+                        local_cost_pre_swap_xy += synthesis_distance_dev_1(S_xy[CENTER], S_xy[SOUTH]);
                     if (y > 0)
-                        local_cost_pre_swap_xy += synthesis_distance_device(S_xy[CENTER], S_xy[WEST]);
+                        local_cost_pre_swap_xy += synthesis_distance_dev_1(S_xy[CENTER], S_xy[WEST]);
                     if (y + 1 < layout::col_count)
-                        local_cost_pre_swap_xy += synthesis_distance_device(S_xy[CENTER], S_xy[EAST]);
+                        local_cost_pre_swap_xy += synthesis_distance_dev_1(S_xy[CENTER], S_xy[EAST]);
                     if (x > 0 && y > 0)
-                        local_cost_pre_swap_xy += synthesis_distance_device(S_xy[CENTER], S_xy[NORTH_WEST]);
+                        local_cost_pre_swap_xy += synthesis_distance_dev_1(S_xy[CENTER], S_xy[NORTH_WEST]);
                     if (x > 0 && y + 1 < layout::col_count)
-                        local_cost_pre_swap_xy += synthesis_distance_device(S_xy[CENTER], S_xy[NORTH_EAST]);
+                        local_cost_pre_swap_xy += synthesis_distance_dev_1(S_xy[CENTER], S_xy[NORTH_EAST]);
                     if (x + 1 < layout::row_count && y > 0)
-                        local_cost_pre_swap_xy += synthesis_distance_device(S_xy[CENTER], S_xy[SOUTH_WEST]);
+                        local_cost_pre_swap_xy += synthesis_distance_dev_1(S_xy[CENTER], S_xy[SOUTH_WEST]);
                     if (x + 1 < layout::row_count && y + 1 < layout::col_count)
-                        local_cost_pre_swap_xy += synthesis_distance_device(S_xy[CENTER], S_xy[SOUTH_EAST]);
+                        local_cost_pre_swap_xy += synthesis_distance_dev_1(S_xy[CENTER], S_xy[SOUTH_EAST]);
 
                     unsigned local_cost_pre_swap = local_cost_pre_swap_ij + local_cost_pre_swap_xy;
 
@@ -180,42 +180,42 @@ namespace barcode_layout {
                     unsigned local_cost_post_swap = 0;
 
                     if (i > 0)
-                        local_cost_post_swap += synthesis_distance_device(S_xy[CENTER], S_ij[NORTH]);
+                        local_cost_post_swap += synthesis_distance_dev_1(S_xy[CENTER], S_ij[NORTH]);
                     if (i + 1 < layout::row_count)
-                        local_cost_post_swap += synthesis_distance_device(S_xy[CENTER], S_ij[SOUTH]);
+                        local_cost_post_swap += synthesis_distance_dev_1(S_xy[CENTER], S_ij[SOUTH]);
                     if (j > 0)
-                        local_cost_post_swap += synthesis_distance_device(S_xy[CENTER], S_ij[WEST]);
+                        local_cost_post_swap += synthesis_distance_dev_1(S_xy[CENTER], S_ij[WEST]);
                     if (j + 1 < layout::col_count)
-                        local_cost_post_swap += synthesis_distance_device(S_xy[CENTER], S_ij[EAST]);
+                        local_cost_post_swap += synthesis_distance_dev_1(S_xy[CENTER], S_ij[EAST]);
                     if (i > 0 && j > 0)
-                        local_cost_post_swap += synthesis_distance_device(S_xy[CENTER], S_ij[NORTH_WEST]);
+                        local_cost_post_swap += synthesis_distance_dev_1(S_xy[CENTER], S_ij[NORTH_WEST]);
                     if (i > 0 && j + 1 < layout::col_count)
-                        local_cost_post_swap += synthesis_distance_device(S_xy[CENTER], S_ij[NORTH_EAST]);
+                        local_cost_post_swap += synthesis_distance_dev_1(S_xy[CENTER], S_ij[NORTH_EAST]);
                     if (i + 1 < layout::row_count && j > 0)
-                        local_cost_post_swap += synthesis_distance_device(S_xy[CENTER], S_ij[SOUTH_WEST]);
+                        local_cost_post_swap += synthesis_distance_dev_1(S_xy[CENTER], S_ij[SOUTH_WEST]);
                     if (i + 1 < layout::row_count && j + 1 < layout::col_count)
-                        local_cost_post_swap += synthesis_distance_device(S_xy[CENTER], S_ij[SOUTH_EAST]);
+                        local_cost_post_swap += synthesis_distance_dev_1(S_xy[CENTER], S_ij[SOUTH_EAST]);
 
                     /*****************************************************************************
                      * Now calculate the local cost of layout position (x,y) after the swap.
                      ****************************************************************************/
 
                     if (x > 0)
-                        local_cost_post_swap += synthesis_distance_device(S_ij[CENTER], S_xy[NORTH]);
+                        local_cost_post_swap += synthesis_distance_dev_1(S_ij[CENTER], S_xy[NORTH]);
                     if (x + 1 < layout::row_count)
-                        local_cost_post_swap += synthesis_distance_device(S_ij[CENTER], S_xy[SOUTH]);
+                        local_cost_post_swap += synthesis_distance_dev_1(S_ij[CENTER], S_xy[SOUTH]);
                     if (y > 0)
-                        local_cost_post_swap += synthesis_distance_device(S_ij[CENTER], S_xy[WEST]);
+                        local_cost_post_swap += synthesis_distance_dev_1(S_ij[CENTER], S_xy[WEST]);
                     if (y + 1 < layout::col_count)
-                        local_cost_post_swap += synthesis_distance_device(S_ij[CENTER], S_xy[EAST]);
+                        local_cost_post_swap += synthesis_distance_dev_1(S_ij[CENTER], S_xy[EAST]);
                     if (x > 0 && y > 0)
-                        local_cost_post_swap += synthesis_distance_device(S_ij[CENTER], S_xy[NORTH_WEST]);
+                        local_cost_post_swap += synthesis_distance_dev_1(S_ij[CENTER], S_xy[NORTH_WEST]);
                     if (x > 0 && y + 1 < layout::col_count)
-                        local_cost_post_swap += synthesis_distance_device(S_ij[CENTER], S_xy[NORTH_EAST]);
+                        local_cost_post_swap += synthesis_distance_dev_1(S_ij[CENTER], S_xy[NORTH_EAST]);
                     if (x + 1 < layout::row_count && y > 0)
-                        local_cost_post_swap += synthesis_distance_device(S_ij[CENTER], S_xy[SOUTH_WEST]);
+                        local_cost_post_swap += synthesis_distance_dev_1(S_ij[CENTER], S_xy[SOUTH_WEST]);
                     if (x + 1 < layout::row_count && y + 1 < layout::col_count)
-                        local_cost_post_swap += synthesis_distance_device(S_ij[CENTER], S_xy[SOUTH_EAST]);
+                        local_cost_post_swap += synthesis_distance_dev_1(S_ij[CENTER], S_xy[SOUTH_EAST]);
 
                     /********************************************************************
                      * Test if (x,y) is in the direct neighborhood of (i,j).
@@ -228,8 +228,8 @@ namespace barcode_layout {
                      *******************************************************************/
 
                     if (std::abs((int) i - (int) x) <= 1 && std::abs((int) j - (int) y) <= 1) {
-                        local_cost_pre_swap -= synthesis_distance_device(S_ij[CENTER], S_xy[CENTER]);
-                        local_cost_post_swap += synthesis_distance_device(S_ij[CENTER], S_xy[CENTER]);
+                        local_cost_pre_swap -= synthesis_distance_dev_1(S_ij[CENTER], S_xy[CENTER]);
+                        local_cost_post_swap += synthesis_distance_dev_1(S_ij[CENTER], S_xy[CENTER]);
                     }
 
                     if (local_cost_post_swap < local_cost_pre_swap) {
@@ -258,21 +258,21 @@ namespace barcode_layout {
                 unsigned local_cost_post_swap_ij = 0;
 
                 if (i > 0)
-                    local_cost_post_swap_ij += synthesis_distance_device(s_xy, S_ij[NORTH]);
+                    local_cost_post_swap_ij += synthesis_distance_dev_1(s_xy, S_ij[NORTH]);
                 if (i + 1 < layout::row_count)
-                    local_cost_post_swap_ij += synthesis_distance_device(s_xy, S_ij[SOUTH]);
+                    local_cost_post_swap_ij += synthesis_distance_dev_1(s_xy, S_ij[SOUTH]);
                 if (j > 0)
-                    local_cost_post_swap_ij += synthesis_distance_device(s_xy, S_ij[WEST]);
+                    local_cost_post_swap_ij += synthesis_distance_dev_1(s_xy, S_ij[WEST]);
                 if (j + 1 < layout::col_count)
-                    local_cost_post_swap_ij += synthesis_distance_device(s_xy, S_ij[EAST]);
+                    local_cost_post_swap_ij += synthesis_distance_dev_1(s_xy, S_ij[EAST]);
                 if (i > 0 && j > 0)
-                    local_cost_post_swap_ij += synthesis_distance_device(s_xy, S_ij[NORTH_WEST]);
+                    local_cost_post_swap_ij += synthesis_distance_dev_1(s_xy, S_ij[NORTH_WEST]);
                 if (i > 0 && j + 1 < layout::col_count)
-                    local_cost_post_swap_ij += synthesis_distance_device(s_xy, S_ij[NORTH_EAST]);
+                    local_cost_post_swap_ij += synthesis_distance_dev_1(s_xy, S_ij[NORTH_EAST]);
                 if (i + 1 < layout::row_count && j > 0)
-                    local_cost_post_swap_ij += synthesis_distance_device(s_xy, S_ij[SOUTH_WEST]);
+                    local_cost_post_swap_ij += synthesis_distance_dev_1(s_xy, S_ij[SOUTH_WEST]);
                 if (i + 1 < layout::row_count && j + 1 < layout::col_count)
-                    local_cost_post_swap_ij += synthesis_distance_device(s_xy, S_ij[SOUTH_EAST]);
+                    local_cost_post_swap_ij += synthesis_distance_dev_1(s_xy, S_ij[SOUTH_EAST]);
 
                 //printf("local_cost_pre_swap_ij=%i, local_cost_post_swap_ij=%i\n", local_cost_pre_swap_ij,
 
@@ -303,7 +303,7 @@ namespace barcode_layout {
     }
 
 
-    class local_search {
+    class local_search_dev_3 {
 
         layout current_layout;
         unsigned current_cost;
@@ -319,7 +319,7 @@ namespace barcode_layout {
 
         static bool verbose;
 
-        local_search(const std::vector<synthesis_schedule> &schedules,
+        local_search_dev_3(const std::vector<synthesis_schedule> &schedules,
                      layout initial_layout)
                 : current_layout(std::move(initial_layout)),
                   current_cost(layout_cost(schedules, current_layout)) {
@@ -379,7 +379,7 @@ namespace barcode_layout {
                            cudaMemcpyHostToDevice);
 
                 /* Find best swap partners for each position (i,j) */
-                find_best_swap_partner
+                find_best_swap_partner_v3
                 <<<1024, 256>>>(
                         positions_dev,
                         position_count,
@@ -593,7 +593,7 @@ namespace barcode_layout {
 
         }
 
-        ~local_search() {
+        ~local_search_dev_3() {
             cudaFree(schedules_dev);
             cudaFree(best_xy_dev);
             free(best_xy_host);
@@ -609,7 +609,7 @@ namespace barcode_layout {
         }
     };
 
-    bool local_search::verbose = false;
+    bool local_search_dev_3::verbose = false;
 }
 
-#endif //INC_2OPT_LOCAL_SEARCH_CUH
+#endif //INC_2OPT_LOCAL_SEARCH_DEV_3_CUH

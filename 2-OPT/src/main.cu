@@ -3,7 +3,10 @@
 #include "layout.h"
 #include "random_layout.h"
 #include "input_layout.h"
-#include "local_search.cuh"
+#include "local_search_dev_0.cuh"
+#include "local_search_dev_1.cuh"
+#include "local_search_dev_2.cuh"
+#include "local_search_dev_3.cuh"
 #include "layout_cost.h"
 #include "local_search_host.h"
 #include <fstream>
@@ -14,6 +17,9 @@
 #include "read_barcodes.h"
 
 using namespace barcode_layout;
+
+// which implementation do we use?
+typedef local_search_dev_1 local_search;
 
 int main(int argc, char** argv) {
 

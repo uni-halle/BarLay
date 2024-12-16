@@ -11,7 +11,7 @@ find_package(OpenMP REQUIRED)
 add_executable(2opt src/main.cu
         src/barcode.h
         src/synthesis_schedule.h
-        src/synthesis_distance_device.cuh
+        src/synthesis_distance_dev_1.cuh
         src/layout.h
         src/random_layout.h
         src/layout_cost.h
@@ -22,6 +22,10 @@ add_executable(2opt src/main.cu
         src/input_layout.h
         src/read_barcodes.h
         src/read_barcodes.h
+        src/synthesis_distance_dev_1.cuh
+        src/local_search_dev_3.cuh
+        src/local_search_dev_2.cuh
+        src/local_search_dev_2.cuh
 )
 
 # add hidden executable that uses synthesis schedules as input
@@ -29,7 +33,7 @@ add_executable(2opt_syn_sched EXCLUDE_FROM_ALL
         src/main_syn_sched.cu
         src/barcode.h
         src/synthesis_schedule.h
-        src/synthesis_distance_device.cuh
+        src/synthesis_distance_dev_1.cuh
         src/layout.h
         src/random_layout.h
         src/layout_cost.h
@@ -40,6 +44,8 @@ add_executable(2opt_syn_sched EXCLUDE_FROM_ALL
         src/input_layout.h
         src/read_barcodes.h
         src/read_barcodes.h
+        src/local_search_dev_2.cuh
+        src/local_search_dev_2.cuh
 )
 
 
