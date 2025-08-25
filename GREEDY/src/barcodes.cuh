@@ -3,15 +3,15 @@
 
 #include "config.cuh"
 
-#include <stdint.h>
-#include <stdio.h>
+#include <cstdint>
+#include <cstdio>
 
 namespace barcodes {
     struct Schedule {
         uint32_t chunks[SYNTH_SCHEDULE_CHUNKS];
     };
 
-    using ScheduleSet = struct Schedule[NUMBER_OF_SCHEDULES];
+    using ScheduleSet = Schedule[NUMBER_OF_SCHEDULES];
 
     void read(FILE *source, ScheduleSet *schedules);
 }

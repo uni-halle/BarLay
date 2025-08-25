@@ -12,7 +12,7 @@ namespace algorithm {
         uint32_t indexPoolHandle;
     };
 
-    using ResultBlock = struct BarcodeQuality[THREAD_BLOCKS];
+    using ResultBlock = BarcodeQuality[THREAD_BLOCKS];
 
     __global__ void grid_reduction(
         uint32_t x,
@@ -31,7 +31,7 @@ namespace algorithm {
         const ResultBlock * __restrict__ result_block
     );
 
-    void optimize(const barcodes::ScheduleSet *schedules, layout::Layout *result);
+    void optimize(const barcodes::ScheduleSet * __restrict__ schedules, layout::Layout * __restrict__ result);
 }
 
 #endif //GREEDY_ALGORITHM_CUH

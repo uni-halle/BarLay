@@ -2,11 +2,11 @@
 #include "layout.cuh"
 #include "algorithm.cuh"
 
-#include <stdio.h>
+#include <cstdio>
 
 int main(int argc, char *argv[]) {
-    barcodes::ScheduleSet *schedules = (barcodes::ScheduleSet *)malloc(sizeof(barcodes::ScheduleSet));
-    layout::Layout *layout = (layout::Layout *)malloc(sizeof(layout::Layout));
+    const auto schedules = static_cast<barcodes::ScheduleSet *>(malloc(sizeof(barcodes::ScheduleSet)));
+    auto layout = static_cast<layout::Layout *>(malloc(sizeof(layout::Layout)));
 
     barcodes::read(stdin, schedules);
 

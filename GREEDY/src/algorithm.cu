@@ -3,14 +3,14 @@
 #include "algorithm.cuh"
 #include "index_pool.cuh"
 
-#include <stdio.h>
+#include <cstdio>
 #include <iostream>
 
 void checkForError(const char *function, int line)
 {
     cudaDeviceSynchronize();
 
-    cudaError_t err = cudaGetLastError();
+    const cudaError_t err = cudaGetLastError();
     if ( err != cudaSuccess )
     {
         cudaDeviceReset();
@@ -30,8 +30,8 @@ void checkForError(const char *function, int line)
 
 namespace algorithm {
     __global__ void grid_reduction(
-        const uint32_t x,
-        const uint32_t y,
+        const uint16_t x,
+        const uint16_t y,
         const layout::Layout * __restrict__ layout,
         const barcodes::ScheduleSet * __restrict__ schedules,
         const index_pool::Pool * __restrict__ pool,
@@ -48,7 +48,7 @@ namespace algorithm {
         }
 
         __shared__ neighborhood::Neighborhood neighbors;
-        __shared__ struct BarcodeQuality qualities[THREADS_PER_THREAD_BLOCK];
+        __shared__ BarcodeQuality qualities[THREADS_PER_THREAD_BLOCK];
 
         qualities[threadId].indexPoolHandle = blockOffset + threadId;
         qualities[threadId].quality = USHRT_MAX;
@@ -62,7 +62,7 @@ namespace algorithm {
         while (blockOffset + threadId < pool->size) {
             barcodes::Schedule candidate = (*schedules)[pool->indices[blockOffset + threadId]];
 
-            const uint16_t quality = neighborhood::nquality(x, y, &candidate, schedules, &neighbors);
+            const uint16_t quality = neighborhood::nquality(x, y, &candidate, &neighbors);
 
             if (quality < qualities[threadId].quality) {
                 qualities[threadId].quality = quality;
@@ -88,15 +88,15 @@ namespace algorithm {
     }
 
     __global__ void block_reduction(
-        const size_t x,
-        const size_t y,
+        const uint16_t x,
+        const uint16_t y,
         layout::Layout * __restrict__ layout,
         index_pool::Pool * __restrict__ pool,
         const ResultBlock * __restrict__ result_block
     ) {
         const uint32_t threadId = threadIdx.x;
 
-        __shared__ struct BarcodeQuality qualities[THREAD_BLOCKS];
+        __shared__ BarcodeQuality qualities[THREAD_BLOCKS];
 
         // load block results into shared memory
         qualities[threadId] = (*result_block)[threadId];
@@ -118,36 +118,36 @@ namespace algorithm {
     }
 
     __global__ void process_row(
-        const size_t x,
-        layout::Layout *layout,
-        barcodes::ScheduleSet *schedules,
-        index_pool::Pool *pool,
-        ResultBlock *result_block
+        const uint16_t x,
+        layout::Layout * __restrict__ layout,
+        barcodes::ScheduleSet * __restrict__ schedules,
+        index_pool::Pool * __restrict__ pool,
+        ResultBlock * __restrict__ result_block
     ) {
-        for (size_t y = 0; y < COL_COUNT; y++) {
+        for (uint16_t y = 0; y < COL_COUNT; y++) {
             grid_reduction<<<THREAD_BLOCKS, THREADS_PER_THREAD_BLOCK>>>(x, y, layout, schedules, pool, result_block);
             block_reduction<<<1, THREAD_BLOCKS>>>(x, y, layout, pool, result_block);
         }
     }
 
-    void optimize(const barcodes::ScheduleSet *schedules, layout::Layout *result) {
+    void optimize(const barcodes::ScheduleSet * __restrict__ schedules, layout::Layout * __restrict__ result) {
         barcodes::ScheduleSet *device_schedules;
-        cudaMalloc((void **)&device_schedules, sizeof(barcodes::ScheduleSet));
-        cudaMemcpy((void *)device_schedules, (void *)schedules, sizeof(barcodes::ScheduleSet), cudaMemcpyHostToDevice);
+        cudaMalloc(reinterpret_cast<void **>(&device_schedules), sizeof(barcodes::ScheduleSet));
+        cudaMemcpy(device_schedules, schedules, sizeof(barcodes::ScheduleSet), cudaMemcpyHostToDevice);
 
         layout::Layout *device_layout;
-        cudaMalloc((void **)&device_layout, sizeof(layout::Layout));
+        cudaMalloc(reinterpret_cast<void **>(&device_layout), sizeof(layout::Layout));
 
         ResultBlock *device_result_block;
-        cudaMalloc((void **)&device_result_block, sizeof(ResultBlock));
+        cudaMalloc(reinterpret_cast<void **>(&device_result_block), sizeof(ResultBlock));
 
         index_pool::Pool *device_index_pool;
-        cudaMalloc((void **)&device_index_pool, sizeof(index_pool::Pool));
+        cudaMalloc(reinterpret_cast<void **>(&device_index_pool), sizeof(index_pool::Pool));
         index_pool::prepare<<<1,1>>>(device_index_pool);
 
         int finished = 0;
         int percent = -1;
-        for (size_t x = 0; x < ROW_COUNT; x++) {
+        for (uint16_t x = 0; x < ROW_COUNT; x++) {
             process_row<<<1, 1>>>(x, device_layout, device_schedules, device_index_pool, device_result_block);
             checkForError(__func__, __LINE__);
 
@@ -164,7 +164,6 @@ namespace algorithm {
                     fprintf(stderr, "#");
                 for (size_t i = 0; i < 100 - percent; i++)
                     fprintf(stderr, " ");
-
 
                 fprintf(stderr, "]");
 

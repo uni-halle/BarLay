@@ -1,14 +1,14 @@
 #include "config.cuh"
 #include "layout.cuh"
 
-#include <stdint.h>
-#include <stdio.h>
+#include <cstdint>
+#include <cstdio>
 
 namespace layout {
-    void print(FILE *target, const barcodes::ScheduleSet *schedules, const struct Layout *layout) {
+    void print(FILE *target, const barcodes::ScheduleSet *schedules, const Layout *layout) {
         for (size_t x = 0; x < ROW_COUNT; x++) {
             for (size_t y = 0; y < COL_COUNT; y++) {
-                const struct Position *position = &layout->positions[x][y];
+                const Position *position = &layout->positions[x][y];
                 const barcodes::Schedule *schedule = &(*schedules)[position->i_schedule];
                 // printf("position->i_schedule: %u\n", position->i_schedule);
 
@@ -28,7 +28,7 @@ namespace layout {
         }
     }
 
-    void initialize(struct Layout *layout) {
+    void initialize(Layout *layout) {
         uint32_t i = 0;
         for (size_t x = 0; x < ROW_COUNT; x++) {
             for (size_t y = 0; y < COL_COUNT; y++) {

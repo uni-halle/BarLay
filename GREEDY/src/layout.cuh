@@ -9,11 +9,11 @@ namespace layout {
     };
 
     struct Layout {
-        struct Position positions[ROW_COUNT][COL_COUNT];
+        Position positions[ROW_COUNT][COL_COUNT];
     };
 
-    void print(FILE *target, const barcodes::ScheduleSet *schedules, const struct Layout *layout);
-    void initialize(struct Layout *layout);
+    void print(FILE *target, const barcodes::ScheduleSet *schedules, const Layout *layout);
+    void initialize(Layout *layout);
 }
 
 #endif //GREEDY_LAYOUT_CUH
