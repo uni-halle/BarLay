@@ -1,45 +1,10 @@
-#ifndef _ALGORITHM_
-#define _ALGORITHM_
-
-#include "params.hu"
-#include "types.hu"
-#include "neighborhood.cu"
-
-#include "barcodes.cu"
-#include "layout.cu"
+#include "config.cuh"
+#include "neighborhood.cuh"
+#include "algorithm.cuh"
+#include "index_pool.cuh"
 
 #include <stdio.h>
-#include <time.h>
 #include <iostream>
-
-#define THREAD_BLOCKS 1024
-#define THREADS_PER_THREAD_BLOCK 256
-
-namespace index_pool {
-    struct Pool {
-        uint32_t size;
-        uint32_t indices[NUMBER_OF_SCHEDULES];
-    };
-
-    __global__ void prepare(struct Pool *pool) {
-        pool->size = NUMBER_OF_SCHEDULES;
-        for (size_t i = 0; i < NUMBER_OF_SCHEDULES; i++)
-            pool->indices[i] = i;
-    }
-
-    __device__ uint32_t poll(struct Pool *pool, uint32_t index) {
-        // save polled index
-        uint32_t polled = pool->indices[index];
-
-        // replace polled index with index in last position
-        pool->indices[index] = pool->indices[pool->size - 1];
-
-        // reduce pool size
-        pool->size--;
-
-        return polled;
-    }
-}
 
 void checkForError(const char *function, int line)
 {
@@ -64,13 +29,6 @@ void checkForError(const char *function, int line)
 }
 
 namespace algorithm {
-    struct BarcodeQuality {
-        uint16_t quality;
-        uint32_t indexPoolHandle;
-    };
-
-    using ResultBlock = struct BarcodeQuality[THREAD_BLOCKS];
-
     __global__ void grid_reduction(
         uint32_t x,
         uint32_t y,
@@ -222,5 +180,3 @@ namespace algorithm {
         cudaFree(device_index_pool);
     }
 }
-
-#endif

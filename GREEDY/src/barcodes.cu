@@ -1,8 +1,5 @@
-#ifndef _BARCODES_
-#define _BARCODES_
-
-#include "params.hu"
-#include "types.hu"
+#include "config.cuh"
+#include "barcodes.cuh"
 
 #include <stdint.h>
 #include <stdio.h>
@@ -11,7 +8,6 @@ namespace barcodes {
     void read(FILE *source, ScheduleSet *schedules) {
         for (size_t i_schedule = 0; i_schedule < NUMBER_OF_SCHEDULES; i_schedule++) {
             struct Schedule *schedule = &(*schedules)[i_schedule];
-
             
             for (size_t i_chunk = 0; i_chunk < SYNTH_SCHEDULE_CHUNKS; i_chunk++) {
                 schedule->chunks[i_chunk] = 0;
@@ -31,15 +27,4 @@ namespace barcodes {
             fgetc(source); // read newline
         }
     }
-
-    __device__ uint16_t d_synth(const barcodes::Schedule *s1, const barcodes::Schedule *s2) {
-        int distance = 0;
-
-        for (size_t i_chunk = 0; i_chunk < SYNTH_SCHEDULE_CHUNKS; i_chunk++)
-            distance += __popc(s1->chunks[i_chunk] ^ s2->chunks[i_chunk]);
-
-        return distance;
-    }
 }
-
-#endif

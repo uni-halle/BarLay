@@ -1,8 +1,7 @@
-#include "barcodes.cu"
-#include "layout.cu"
-#include "algorithm.cu"
+#include "barcodes.cuh"
+#include "layout.cuh"
+#include "algorithm.cuh"
 
-#include <stdlib.h>
 #include <stdio.h>
 
 int main(int argc, char *argv[]) {

@@ -1,9 +1,11 @@
-#include "../params.hu"
-#include "../types.hu"
-#include "../d_synth.cu"
+#ifndef GREEDY_NEIGHBORHOOD_CUH
+#define GREEDY_NEIGHBORHOOD_CUH
+
+#include "barcodes.cuh"
+#include "layout.cuh"
+#include "d_synth.cuh"
 
 namespace neighborhood {
-
     using Neighborhood = barcodes::Schedule[4];
 
     __device__ __forceinline__ void load(
@@ -46,7 +48,8 @@ namespace neighborhood {
 
         if (x > 0 && y < COL_COUNT - 1)
             quality += d_synth(candidate, &(*neighbors)[3]);
-        
-       return quality;
+
+        return quality;
     }
 }
+#endif //GREEDY_NEIGHBORHOOD_CUH

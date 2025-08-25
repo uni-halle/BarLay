@@ -1,8 +1,6 @@
-#ifndef _D_SYNTH_
-#define _D_SYNTH_
-
-#include "params.hu"
-#include "types.hu"
+#include "config.cuh"
+#include "d_synth.cuh"
+#include "barcodes.cuh"
 
 __device__ int d_synth(barcodes::Schedule *s1, barcodes::Schedule *s2)
 {
@@ -13,5 +11,3 @@ __device__ int d_synth(barcodes::Schedule *s1, barcodes::Schedule *s2)
 
     return distance;
 }
-
-#endif

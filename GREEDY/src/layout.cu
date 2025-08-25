@@ -1,8 +1,5 @@
-#ifndef _LAYOUT_
-#define _LAYOUT_
-
-#include "params.hu"
-#include "types.hu"
+#include "config.cuh"
+#include "layout.cuh"
 
 #include <stdint.h>
 #include <stdio.h>
@@ -41,5 +38,3 @@ namespace layout {
         }
     }
 }
-
-#endif
