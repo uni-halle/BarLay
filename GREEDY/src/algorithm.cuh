@@ -17,18 +17,18 @@ namespace algorithm {
     __global__ void grid_reduction(
         uint32_t x,
         uint32_t y,
-        const layout::Layout *layout,
-        const barcodes::ScheduleSet *schedules,
-        const index_pool::Pool *pool,
-        ResultBlock *result_block
+        const layout::Layout * __restrict__ layout,
+        const barcodes::ScheduleSet * __restrict__ schedules,
+        const index_pool::Pool * __restrict__ pool,
+        ResultBlock * __restrict__ result_block
     );
 
     __global__ void block_reduction(
         size_t x,
         size_t y,
-        layout::Layout *layout,
-        index_pool::Pool *pool,
-        const ResultBlock *result_block
+        layout::Layout * __restrict__ layout,
+        index_pool::Pool * __restrict__ pool,
+        const ResultBlock * __restrict__ result_block
     );
 
     void optimize(const barcodes::ScheduleSet *schedules, layout::Layout *result);

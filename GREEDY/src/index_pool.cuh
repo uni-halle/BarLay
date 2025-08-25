@@ -9,8 +9,8 @@ namespace index_pool {
         uint32_t indices[NUMBER_OF_SCHEDULES];
     };
 
-    __global__ void prepare(struct Pool *pool);
-    __device__ uint32_t poll(struct Pool *pool, uint32_t index);
+    __global__ void prepare(struct Pool * __restrict__ pool);
+    __device__ uint32_t poll(struct Pool * __restrict__ pool, uint32_t index);
 }
 
 #endif //GREEDY_INDEX_POOL_CUH

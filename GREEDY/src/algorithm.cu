@@ -32,10 +32,10 @@ namespace algorithm {
     __global__ void grid_reduction(
         const uint32_t x,
         const uint32_t y,
-        const layout::Layout *layout,
-        const barcodes::ScheduleSet *schedules,
-        const index_pool::Pool *pool,
-        ResultBlock *result_block
+        const layout::Layout * __restrict__ layout,
+        const barcodes::ScheduleSet * __restrict__ schedules,
+        const index_pool::Pool * __restrict__ pool,
+        ResultBlock * __restrict__ result_block
     ) {
         uint32_t blockOffset = THREADS_PER_THREAD_BLOCK * blockIdx.x;
         const uint32_t threadId = threadIdx.x;
@@ -52,9 +52,6 @@ namespace algorithm {
 
         qualities[threadId].indexPoolHandle = blockOffset + threadId;
         qualities[threadId].quality = USHRT_MAX;
-
-        #define MASK_OFFSET_X MASK_X / 2;
-        #define MASK_OFFSET_Y MASK_Y / 2;
         
         if (threadId == 0)
             neighborhood::load(x, y, layout, schedules, &neighbors);
@@ -64,7 +61,7 @@ namespace algorithm {
         // calculate quality of each barcode
         while (blockOffset + threadId < pool->size) {
             barcodes::Schedule candidate = (*schedules)[pool->indices[blockOffset + threadId]];
-            
+
             const uint16_t quality = neighborhood::nquality(x, y, &candidate, schedules, &neighbors);
 
             if (quality < qualities[threadId].quality) {
@@ -93,9 +90,9 @@ namespace algorithm {
     __global__ void block_reduction(
         const size_t x,
         const size_t y,
-        layout::Layout *layout,
-        index_pool::Pool *pool,
-        const ResultBlock *result_block
+        layout::Layout * __restrict__ layout,
+        index_pool::Pool * __restrict__ pool,
+        const ResultBlock * __restrict__ result_block
     ) {
         const uint32_t threadId = threadIdx.x;
 

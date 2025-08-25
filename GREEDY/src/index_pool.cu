@@ -2,13 +2,13 @@
 #include "index_pool.cuh"
 
 namespace index_pool {
-    __global__ void prepare(struct Pool *pool) {
+    __global__ void prepare(struct Pool * __restrict__ pool) {
         pool->size = NUMBER_OF_SCHEDULES;
         for (size_t i = 0; i < NUMBER_OF_SCHEDULES; i++)
             pool->indices[i] = i;
     }
 
-    __device__ uint32_t poll(struct Pool *pool, const uint32_t index) {
+    __device__ uint32_t poll(struct Pool * __restrict__ pool, const uint32_t index) {
         // save polled index
         const uint32_t polled = pool->indices[index];
 

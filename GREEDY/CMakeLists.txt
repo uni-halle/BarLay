@@ -13,7 +13,6 @@ include_directories(src)
 add_executable(GREEDY
         src/algorithm.cu
         src/barcodes.cu
-        src/d_synth.cu
         src/index_pool.cu
         src/layout.cu
         src/main.cu

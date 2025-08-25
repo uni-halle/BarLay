@@ -11,9 +11,9 @@ namespace neighborhood {
     __device__ __forceinline__ void load(
         const uint32_t x,
         const uint32_t y,
-        const layout::Layout *layout,
-        const barcodes::ScheduleSet *schedules,
-        Neighborhood* neighbors
+        const layout::Layout * __restrict__ layout,
+        const barcodes::ScheduleSet * __restrict__ schedules,
+        Neighborhood * __restrict__ neighbors
     ) {
         if (y > 0)
             (*neighbors)[0] = (*schedules)[layout->positions[x][y-1].i_schedule];
@@ -31,9 +31,9 @@ namespace neighborhood {
     __device__ __forceinline__ uint16_t nquality(
         const uint32_t x,
         const uint32_t y,
-        const barcodes::Schedule *candidate,
-        const barcodes::ScheduleSet *schedules,
-        const Neighborhood* neighbors
+        const barcodes::Schedule * __restrict__ candidate,
+        const barcodes::ScheduleSet * __restrict__ schedules,
+        const Neighborhood * __restrict__ neighbors
     ) {
         uint16_t quality = 0;
 
