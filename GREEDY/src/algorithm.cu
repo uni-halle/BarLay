@@ -94,7 +94,6 @@ namespace algorithm {
         size_t x,
         size_t y,
         layout::Layout *layout,
-        barcodes::ScheduleSet *schedules,
         index_pool::Pool *pool,
         ResultBlock *result_block
     ) {
@@ -121,6 +120,19 @@ namespace algorithm {
         }
     }
 
+    __global__ void process_row(
+        size_t x,
+        layout::Layout *layout,
+        barcodes::ScheduleSet *schedules,
+        index_pool::Pool *pool,
+        ResultBlock *result_block
+    ) {
+        for (size_t y = 0; y < COL_COUNT; y++) {
+            grid_reduction<<<THREAD_BLOCKS, THREADS_PER_THREAD_BLOCK>>>(x, y, layout, schedules, pool, result_block);
+            block_reduction<<<1, THREAD_BLOCKS>>>(x, y, layout, pool, result_block);
+        }
+    }
+
     void optimize(const barcodes::ScheduleSet *schedules, layout::Layout *result) {
         barcodes::ScheduleSet *device_schedules;
         cudaMalloc((void **)&device_schedules, sizeof(barcodes::ScheduleSet));
@@ -139,34 +151,27 @@ namespace algorithm {
         int finished = 0;
         int percent = -1;
         for (size_t x = 0; x < ROW_COUNT; x++) {
-            for (size_t y = 0; y < COL_COUNT; y++) {
-                grid_reduction<<<THREAD_BLOCKS, THREADS_PER_THREAD_BLOCK>>>(x, y, device_layout, device_schedules, device_index_pool, device_result_block);
+            process_row<<<1, 1>>>(x, device_layout, device_schedules, device_index_pool, device_result_block);
+            checkForError(__func__, __LINE__);
 
-                checkForError(__func__, __LINE__);
+            finished += COL_COUNT;
+            int newPercent = (100 * finished) / (ROW_COUNT * COL_COUNT);
+            if (percent < newPercent )
+            {
+                cudaDeviceSynchronize();
+                percent = newPercent;
 
-                block_reduction<<<1, THREAD_BLOCKS>>>(x, y, device_layout, device_schedules, device_index_pool, device_result_block);
+                fprintf(stderr, "\roptimizing %*d %% [", 3, percent);
 
-                checkForError(__func__, __LINE__);
-                
-                finished++;
-                int newPercent = (100 * finished) / (ROW_COUNT * COL_COUNT);
-                if (percent < newPercent )
-                {
-                    cudaDeviceSynchronize();
-                    percent = newPercent;
-                    
-                    fprintf(stderr, "\roptimizing %*d %% [", 3, percent);
+                for (size_t i = 0; i < percent; i++)
+                    fprintf(stderr, "#");
+                for (size_t i = 0; i < 100 - percent; i++)
+                    fprintf(stderr, " ");
 
-                    for (size_t i = 0; i < percent; i++)
-                        fprintf(stderr, "#");
-                    for (size_t i = 0; i < 100 - percent; i++)
-                        fprintf(stderr, " ");
-                    
 
-                    fprintf(stderr, "]");
+                fprintf(stderr, "]");
 
-                    std::cerr << std::flush;
-                }
+                std::cerr << std::flush;
             }
         }
 

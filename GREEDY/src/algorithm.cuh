@@ -27,7 +27,6 @@ namespace algorithm {
         size_t x,
         size_t y,
         layout::Layout *layout,
-        barcodes::ScheduleSet *schedules,
         index_pool::Pool *pool,
         ResultBlock *result_block
     );
