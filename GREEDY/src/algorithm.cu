@@ -30,15 +30,15 @@ void checkForError(const char *function, int line)
 
 namespace algorithm {
     __global__ void grid_reduction(
-        uint32_t x,
-        uint32_t y,
-        layout::Layout *layout,
-        barcodes::ScheduleSet *schedules,
-        index_pool::Pool *pool,
+        const uint32_t x,
+        const uint32_t y,
+        const layout::Layout *layout,
+        const barcodes::ScheduleSet *schedules,
+        const index_pool::Pool *pool,
         ResultBlock *result_block
     ) {
         uint32_t blockOffset = THREADS_PER_THREAD_BLOCK * blockIdx.x;
-        uint32_t threadId = threadIdx.x;
+        const uint32_t threadId = threadIdx.x;
 
         if (blockOffset >= pool->size) {
             if (threadId == 0)
@@ -65,7 +65,7 @@ namespace algorithm {
         while (blockOffset + threadId < pool->size) {
             barcodes::Schedule candidate = (*schedules)[pool->indices[blockOffset + threadId]];
             
-            uint16_t quality = neighborhood::nquality(x, y, &candidate, schedules, &neighbors);
+            const uint16_t quality = neighborhood::nquality(x, y, &candidate, schedules, &neighbors);
 
             if (quality < qualities[threadId].quality) {
                 qualities[threadId].quality = quality;
@@ -91,13 +91,13 @@ namespace algorithm {
     }
 
     __global__ void block_reduction(
-        size_t x,
-        size_t y,
+        const size_t x,
+        const size_t y,
         layout::Layout *layout,
         index_pool::Pool *pool,
-        ResultBlock *result_block
+        const ResultBlock *result_block
     ) {
-        uint32_t threadId = threadIdx.x;
+        const uint32_t threadId = threadIdx.x;
 
         __shared__ struct BarcodeQuality qualities[THREAD_BLOCKS];
 
@@ -121,7 +121,7 @@ namespace algorithm {
     }
 
     __global__ void process_row(
-        size_t x,
+        const size_t x,
         layout::Layout *layout,
         barcodes::ScheduleSet *schedules,
         index_pool::Pool *pool,

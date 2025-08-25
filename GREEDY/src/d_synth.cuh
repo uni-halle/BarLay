@@ -3,6 +3,6 @@
 
 #include "barcodes.cuh"
 
-__device__ int d_synth(barcodes::Schedule *s1, barcodes::Schedule *s2);
+__device__ int d_synth(const barcodes::Schedule *s1, const barcodes::Schedule *s2);
 
 #endif

@@ -17,9 +17,9 @@ namespace algorithm {
     __global__ void grid_reduction(
         uint32_t x,
         uint32_t y,
-        layout::Layout *layout,
-        barcodes::ScheduleSet *schedules,
-        index_pool::Pool *pool,
+        const layout::Layout *layout,
+        const barcodes::ScheduleSet *schedules,
+        const index_pool::Pool *pool,
         ResultBlock *result_block
     );
 
@@ -28,7 +28,7 @@ namespace algorithm {
         size_t y,
         layout::Layout *layout,
         index_pool::Pool *pool,
-        ResultBlock *result_block
+        const ResultBlock *result_block
     );
 
     void optimize(const barcodes::ScheduleSet *schedules, layout::Layout *result);

@@ -9,10 +9,10 @@ namespace neighborhood {
     using Neighborhood = barcodes::Schedule[4];
 
     __device__ __forceinline__ void load(
-        uint32_t x,
-        uint32_t y,
-        layout::Layout *layout,
-        barcodes::ScheduleSet *schedules,
+        const uint32_t x,
+        const uint32_t y,
+        const layout::Layout *layout,
+        const barcodes::ScheduleSet *schedules,
         Neighborhood* neighbors
     ) {
         if (y > 0)
@@ -29,11 +29,11 @@ namespace neighborhood {
     }
 
     __device__ __forceinline__ uint16_t nquality(
-        uint32_t x,
-        uint32_t y,
-        barcodes::Schedule *candidate,
-        barcodes::ScheduleSet *schedules,
-        Neighborhood* neighbors
+        const uint32_t x,
+        const uint32_t y,
+        const barcodes::Schedule *candidate,
+        const barcodes::ScheduleSet *schedules,
+        const Neighborhood* neighbors
     ) {
         uint16_t quality = 0;
 
