@@ -2,10 +2,17 @@
 #include <cstdint>
 
 // Base params
-#define ROW_COUNT @ROW_COUNT@
-#define COL_COUNT @COL_COUNT@
-#define NUMBER_OF_SCHEDULES @NUMBER_OF_SCHEDULES@
+#define ROW_COUNT (@ROW_COUNT@)
+#define COL_COUNT (@COL_COUNT@)
+#define NUMBER_OF_SCHEDULES (@NUMBER_OF_SCHEDULES@)
 #define SCHEDULE_LENGTH (@SCHEDULE_LENGTH@)
+
+#define OCCUPANCY_FULL 1
+#define OCCUPANCY_CHESSBOARD 2
+#define OCCUPANCY (@OCCUPANCY@)
+
+#define NEIGHBORHOOD_N8 1
+#define NEIGHBORHOOD (@NEIGHBORHOOD@)
 
 // Chunk math (ceil-div): ((L + B - 1) / B)
 #define SYNTH_SCHEDULE_CHUNK_BIT_SIZE (8*sizeof(uint32_t))

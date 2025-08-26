@@ -125,6 +125,8 @@ namespace algorithm {
         ResultBlock * __restrict__ result_block
     ) {
         for (uint16_t y = 0; y < COL_COUNT; y++) {
+            if (!occupancy::should_be_filled(x,y)) continue;
+
             grid_reduction<<<THREAD_BLOCKS, THREADS_PER_THREAD_BLOCK>>>(x, y, layout, schedules, pool, result_block);
             block_reduction<<<1, THREAD_BLOCKS>>>(x, y, layout, pool, result_block);
         }

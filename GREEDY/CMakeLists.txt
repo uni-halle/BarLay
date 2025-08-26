@@ -18,13 +18,13 @@ add_executable(GREEDY
         src/main.cu
 )
 
-
-
 # === Tunables (overridable with -D ...) ===
 set(ROW_COUNT 1024 CACHE STRING "Number of layout rows")
 set(COL_COUNT 768 CACHE STRING "Number of layout cols")
 set(NUMBER_OF_SCHEDULES "1024*768" CACHE STRING "Number of schedules provided")
 set(SCHEDULE_LENGTH "34*4" CACHE STRING "Schedule length")
+set(NEIGHBORHOOD "NEIGHBORHOOD_N8" CACHE STRING "Neighborhood strategy")
+set(OCCUPANCY "OCCUPANCY_FULL" CACHE STRING "Occupancy strategy")
 
 # Generate a config header with these values
 configure_file(
@@ -32,4 +32,5 @@ configure_file(
         ${CMAKE_BINARY_DIR}/generated/config.cuh
         @ONLY
 )
+
 target_include_directories(GREEDY PRIVATE ${CMAKE_BINARY_DIR}/generated)

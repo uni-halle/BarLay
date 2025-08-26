@@ -31,14 +31,19 @@ var layoutVerifyCmd = &cobra.Command{
 			previousRow  []string
 			currentRow   = make([]string, 0, columns)
 			hammingSumN8 = 0
+			holes        = 0
 		)
 
 		for scanner.Scan() {
 			line := scanner.Text()
 
-			if length == -1 {
+			if len(line) == 0 {
+				holes++
+			}
+
+			if length == -1 && len(line) > 0 {
 				length = len(line)
-			} else if len(line) != length {
+			} else if len(line) != length && len(line) > 0 {
 				fmt.Printf("not all entries have the same size (the first one had %d but the entry no %d had length %d)\n", length, lineCount, len(line))
 				foundError = true
 			}
@@ -90,9 +95,10 @@ var layoutVerifyCmd = &cobra.Command{
 			os.Exit(1)
 		} else {
 			fmt.Printf(`
-the input was a valid %dx%d layout with unique entries of length %d
-the sum of hamming distances in an 8-neighborhood was %d (unidirectional) and %d (bidirectional)
-`, rows, columns, length, hammingSumN8, 2*hammingSumN8)
+The input was a valid %dx%d layout with unique entries of length %d.
+The sum of hamming distances in an 8-neighborhood was %d (unidirectional) and %d (bidirectional).
+It contained %d holes.
+`, rows, columns, length, hammingSumN8, 2*hammingSumN8, holes)
 		}
 	},
 }
@@ -108,6 +114,10 @@ func init() {
 }
 
 func HammingDistance(a, b string) (distance int) {
+	if len(a) == 0 || len(b) == 0 {
+		return 0
+	}
+
 	if len(a) != len(b) {
 		panic(fmt.Errorf("a and b have different lengths ('%s', '%s')", a, b))
 	}

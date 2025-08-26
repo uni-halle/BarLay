@@ -19,7 +19,12 @@ The algorithm can be compiled with different parameters:
 Now you can build the program using CMAKE. Adjust the build args using
 
 ```
--DROW_COUNT=1024 -DCOL_COUNT=768 -DNUMBER_OF_SCHEDULES=1024*768 -DSCHEDULE_LENGTH=34*4
+-DROW_COUNT=1024
+-DCOL_COUNT=768
+-DNUMBER_OF_SCHEDULES=1024*768
+-DSCHEDULE_LENGTH=34*4
+-DNEIGHBORHOOD=NEIGHBORHOOD_N8
+-DOCCUPANCY=OCCUPANCY_FULL or OCCUPANCY_CHESSBOARD
 ```
 
 ## Scheduling the barcodes
@@ -38,3 +43,24 @@ cat <MY_SCHEDULE_LIBRARY> | <BINARY> 1> result.txt
 ```
 
 After the progress bar reaches `100%` you should find a resulting layout as a newline separated row major list in `./result.txt`.
+
+## Neighborhood Strategies
+
+The neighborhood strategy defines how the neighbors of a position influence the quality of a candidate for the position.
+
+In order to add a new strategy:
+
+1. Define a new preprocessor constant in `src/config.cuh.in`
+2. Extend the conditional compilation in `src/neighborhood.cuh` accordingly
+3. Compile the program for the new strategy by using `-DNEIGHBORHOOD=<your constant>`
+
+## Occupancy Strategies
+
+The occupancy strategy defines which positions in the array will be assigned a schedule.
+This allows for sparse array layouts.
+
+In order to add a new strategy:
+
+1. Define a new preprocessor constant in `src/config.cuh.in`
+2. Extend the conditional compilation in `src/occupancy.cuh` accordingly
+3. Compile the program for the new strategy by using `-DOCCUPANCY=<your constant>`
