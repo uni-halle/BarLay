@@ -1,22 +1,20 @@
-#include "barcodes.cu"
-#include "layout.cu"
-#include "algorithm.cu"
+#include "barcodes.cuh"
+#include "layout.cuh"
+#include "algorithm.cuh"
 
-#include <stdlib.h>
-#include <stdio.h>
+#include <cstdio>
 
 int main(int argc, char *argv[]) {
-    barcodes::Set *barcodes = (barcodes::Set *)malloc(sizeof(barcodes::Set));
-    barcodes::ScheduleSet *schedules = (barcodes::ScheduleSet *)malloc(sizeof(barcodes::ScheduleSet));
-    layout::Layout *layout = (layout::Layout *)malloc(sizeof(layout::Layout));
+    const auto schedules = static_cast<barcodes::ScheduleSet *>(malloc(sizeof(barcodes::ScheduleSet)));
+    auto layout = static_cast<layout::Layout *>(malloc(sizeof(layout::Layout)));
 
-    barcodes::read(stdin, barcodes, schedules);
+    barcodes::read(stdin, schedules);
 
     algorithm::optimize(schedules, layout);
 
-    layout::print(stdout, barcodes, layout);
+    // layout::initialize(layout);
+    layout::print(stdout, schedules, layout);
 
-    free(barcodes);
     free(schedules);
     free(layout);
 }
